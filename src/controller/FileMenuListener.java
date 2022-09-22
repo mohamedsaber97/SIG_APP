@@ -11,7 +11,7 @@ public class FileMenuListener extends FileOperations implements ActionListener {
 
     //define data to make actions file menu
     FileOperations fileOperations = new FileOperations();
-    ArrayList<InvoiceHeader> readData = new ArrayList<>();
+    public ArrayList<InvoiceHeader> readData = new ArrayList<>();
     ArrayList<InvoiceHeader> savedData = new ArrayList<>();
 
     //method to implement actions on file menu

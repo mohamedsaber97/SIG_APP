@@ -10,6 +10,12 @@ public class InvoiceHeader {
     String customerName;
     ArrayList<InvoiceLine> invoiceLines;
 
+    double total = 0.0;
+
+    //create default constructor
+    public InvoiceHeader() {
+    }
+
     //constructor for invoiceHeader model
     public InvoiceHeader(String invoiceNum, String invoiceDate, String customerName) {
         this.invoiceNum = invoiceNum;
@@ -31,6 +37,21 @@ public class InvoiceHeader {
     }
 
     public ArrayList<InvoiceLine> getInvoiceLines() {
+        if (invoiceLines == null) {
+            invoiceLines = new ArrayList<>();
+        }
         return invoiceLines;
+    }
+
+    public double getHeaderTotal() {
+        for (InvoiceLine invoiceLine : getInvoiceLines()) {
+            total += invoiceLine.getLineTotal();
+        }
+        return total;
+    }
+
+    public String printInvoiceHeader() {
+        return "InvoiceHeader\n{\n" + "invoiceNum = " + invoiceNum
+                + " , invoiceDate = " + invoiceDate + " , customerName = " + customerName +  "\n}";
     }
 }

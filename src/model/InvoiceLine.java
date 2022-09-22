@@ -3,24 +3,23 @@ package model;
 public class InvoiceLine {
 
     //definition of invoice lines data
-    String invoiceNum;
     String itemName;
     double itemPrice;
     int count;
+    InvoiceHeader invoiceHeader;
+
+    public InvoiceLine() {
+    }
 
     //constructor for invoiceLine
-    public InvoiceLine(String invoiceNum, String itemName, double itemPrice, int count) {
-        this.invoiceNum = invoiceNum;
+    public InvoiceLine(String itemName, double itemPrice, int count, InvoiceHeader invoiceHeader) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.count = count;
+        this.invoiceHeader = invoiceHeader;
     }
 
     //property to get updated data of invoiceLine
-    public String getInvoiceNum() {
-        return invoiceNum;
-    }
-
     public String getItemName() {
         return itemName;
     }
@@ -32,4 +31,19 @@ public class InvoiceLine {
     public int getCount() {
         return count;
     }
+
+    public InvoiceHeader getInvoiceHeader() {
+        return invoiceHeader;
+    }
+
+    public double getLineTotal() {
+        return itemPrice * count;
+    }
+
+    public String printInvoiceLine() {
+        return "InvoiceLine\n{\n" + "invoiceNum = " + invoiceHeader.getInvoiceNum()
+                + " , itemName = " + itemName + " , itemPrice = " + itemPrice + " , count = " + count + "\n}";
+    }
+
+
 }

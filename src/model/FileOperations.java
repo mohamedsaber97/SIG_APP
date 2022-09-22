@@ -2,11 +2,13 @@ package model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileOperations extends Component {
 
@@ -14,8 +16,6 @@ public class FileOperations extends Component {
     JFileChooser readFileChooser, writeFileChooser;
     int readResult, writeResult;
     File readFile, writeFile;
-    FileReader fileReader;
-    BufferedReader bufferedReader;
     InvoiceHeader invoiceHeader;
     ArrayList<InvoiceHeader> headerArrayList = new ArrayList<>();
 
@@ -25,23 +25,17 @@ public class FileOperations extends Component {
         readResult = readFileChooser.showOpenDialog(this);
         if (readResult == JFileChooser.APPROVE_OPTION) {
             readFile = readFileChooser.getSelectedFile();  //save file path
+            Path path = Paths.get(readFile.getAbsolutePath());
             System.out.println("readFile path is : " + readFile);
-            String line;
             try {
-                fileReader = new FileReader(readFile); //to read saved file
-                bufferedReader = new BufferedReader(fileReader); //get file data and save it into buffer
-                while ((line = bufferedReader.readLine()) != null) {
+                List<String> headerLines = Files.readAllLines(path);
+                for (String line : headerLines) {
                     String[] data = line.split(","); // use comma as separator
                     invoiceHeader = new InvoiceHeader(data[0], data[1], data[2]); //update data to invoiceHeader model
                     headerArrayList.add(invoiceHeader);
-                    System.out.println("Invoice "
-                            + "["
-                            + invoiceHeader.getInvoiceNum()
-                            + " , " + invoiceHeader.getInvoiceDate()
-                            + " , " + invoiceHeader.getCustomerName()
-                            + "]");
+                    String printTxt= invoiceHeader.printInvoiceHeader();
+                    System.out.println(printTxt);
                 }
-                bufferedReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -3,10 +3,12 @@ package view;
 import controller.FileMenuListener;
 import controller.InvoiceHeaderListener;
 import controller.InvoiceLineListener;
+import model.InvoiceHeader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class InvoiceFrame extends JFrame {
 
@@ -27,6 +29,8 @@ public class InvoiceFrame extends JFrame {
     FileMenuListener menuListener;
     InvoiceHeaderListener headerListener;
     InvoiceLineListener lineListener;
+
+    ArrayList<InvoiceHeader> headerArrayList;
 
     //constructor for invoiceFrame creation
     public InvoiceFrame() {
@@ -105,6 +109,7 @@ public class InvoiceFrame extends JFrame {
 
     //method to draw header invoice table
     void drawHeaderTable() {
+
         String[] cols = {"No.", "Date", "Customer", "Total"};
         int rows = 4;
         headerTableModel = new DefaultTableModel(rows, cols.length);
