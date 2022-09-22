@@ -28,6 +28,7 @@ public class InvoiceFrame extends JFrame {
     InvoiceHeaderListener headerListener;
     InvoiceLineListener lineListener;
 
+    //constructor for invoiceFrame creation
     public InvoiceFrame() {
 
         //define frame data
