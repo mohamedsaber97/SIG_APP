@@ -23,7 +23,7 @@ public class InvoiceHeader {
         this.customerName = customerName;
     }
 
-    //property to get updated data of invoiceHeader
+    //properties to get updated data of invoiceHeader
     public String getInvoiceNum() {
         return invoiceNum;
     }
@@ -43,6 +43,7 @@ public class InvoiceHeader {
         return invoiceLines;
     }
 
+    //method to get header table total
     public double getHeaderTotal() {
         for (InvoiceLine invoiceLine : getInvoiceLines()) {
             total += invoiceLine.getLineTotal();
@@ -50,8 +51,9 @@ public class InvoiceHeader {
         return total;
     }
 
+    //method to print header table data
     public String printInvoiceHeader() {
         return "InvoiceHeader\n{\n" + "invoiceNum = " + invoiceNum
-                + " , invoiceDate = " + invoiceDate + " , customerName = " + customerName +  "\n}";
+                + " , invoiceDate = " + invoiceDate + " , customerName = " + customerName + "\n}";
     }
 }

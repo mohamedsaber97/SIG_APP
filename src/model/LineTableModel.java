@@ -4,19 +4,24 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
 public class LineTableModel extends AbstractTableModel {
+
+    //define rows and cols of line table
     String[] cols = {"No.", "Item Name", "Item Price", "Count", "Total"};
     ArrayList<InvoiceLine> lineArrayList;
 
+    //override method to get size of table rows
     @Override
     public int getRowCount() {
         return lineArrayList.size();
     }
 
+    //override method to get length of table cols
     @Override
     public int getColumnCount() {
         return cols.length;
     }
 
+    //override method to get data of line table
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         InvoiceLine invoiceLine = lineArrayList.get(rowIndex);
@@ -30,6 +35,7 @@ public class LineTableModel extends AbstractTableModel {
         };
     }
 
+    //method to update data into line table
     public void fireLineData(ArrayList<InvoiceLine> lines) {
         this.lineArrayList = lines;
         this.fireTableDataChanged();

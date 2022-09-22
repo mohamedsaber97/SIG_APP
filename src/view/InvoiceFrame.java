@@ -3,12 +3,11 @@ package view;
 import controller.FileMenuListener;
 import controller.InvoiceHeaderListener;
 import controller.InvoiceLineListener;
-import model.InvoiceHeader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
+
 
 public class InvoiceFrame extends JFrame {
 
@@ -30,7 +29,6 @@ public class InvoiceFrame extends JFrame {
     InvoiceHeaderListener headerListener;
     InvoiceLineListener lineListener;
 
-    ArrayList<InvoiceHeader> headerArrayList;
 
     //constructor for invoiceFrame creation
     public InvoiceFrame() {

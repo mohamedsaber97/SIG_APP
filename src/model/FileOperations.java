@@ -33,7 +33,7 @@ public class FileOperations extends Component {
                     String[] data = line.split(","); // use comma as separator
                     invoiceHeader = new InvoiceHeader(data[0], data[1], data[2]); //update data to invoiceHeader model
                     headerArrayList.add(invoiceHeader);
-                    String printTxt= invoiceHeader.printInvoiceHeader();
+                    String printTxt = invoiceHeader.printInvoiceHeader();
                     System.out.println(printTxt);
                 }
             } catch (IOException e) {

@@ -19,7 +19,7 @@ public class InvoiceLine {
         this.invoiceHeader = invoiceHeader;
     }
 
-    //property to get updated data of invoiceLine
+    //properties to get updated data of invoiceLine
     public String getItemName() {
         return itemName;
     }
@@ -40,6 +40,7 @@ public class InvoiceLine {
         return itemPrice * count;
     }
 
+    //method to print line table data
     public String printInvoiceLine() {
         return "InvoiceLine\n{\n" + "invoiceNum = " + invoiceHeader.getInvoiceNum()
                 + " , itemName = " + itemName + " , itemPrice = " + itemPrice + " , count = " + count + "\n}";
