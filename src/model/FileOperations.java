@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,9 +27,10 @@ public class FileOperations extends Component {
         if (readResult == JFileChooser.APPROVE_OPTION) {
             readFile = readFileChooser.getSelectedFile();  //save file path
             Path path = Paths.get(readFile.getAbsolutePath());
-            System.out.println("readFile path is : " + readFile);
+            System.out.println("readFile path is : " + path);
             try {
-                List<String> headerLines = Files.readAllLines(path);
+                System.out.println("before");
+                List<String> headerLines = Files.readAllLines(path, Charset.defaultCharset());
                 for (String line : headerLines) {
                     String[] data = line.split(","); // use comma as separator
                     invoiceHeader = new InvoiceHeader(data[0], data[1], data[2]); //update data to invoiceHeader model
@@ -38,6 +40,7 @@ public class FileOperations extends Component {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                System.out.println("wrong file format " + e.getMessage());
             }
         }
         return headerArrayList;
