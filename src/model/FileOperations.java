@@ -53,11 +53,12 @@ public class FileOperations extends Component {
                 invoiceFrame.getHeaderTableModel().fireTableDataChanged();
                 System.out.println("test  get data from table after updated -- " +
                         "user name is : " + headerTableModel.headerArrayList.get(0).customerName);
-            } catch (IOException e) {
+            } catch (ArrayIndexOutOfBoundsException | IOException e) {
                 e.printStackTrace();
                 System.out.println("wrong file format " + e.getMessage());
             }
         }
+
         return headerArrayList;
     }
 
