@@ -1,5 +1,7 @@
 package model;
 
+import view.InvoiceFrame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -19,6 +21,13 @@ public class FileOperations extends Component {
     File readFile, writeFile;
     InvoiceHeader invoiceHeader;
     ArrayList<InvoiceHeader> headerArrayList = new ArrayList<>();
+    HeaderTableModel headerTableModel;
+    InvoiceFrame invoiceFrame;
+
+    //create constructor to receive InvoiceFrame Object
+    public FileOperations(InvoiceFrame invoiceFrame) {
+        this.invoiceFrame = invoiceFrame;
+    }
 
     //method to read invoice header data from .csv file
     public ArrayList<InvoiceHeader> readFile() {
@@ -29,7 +38,6 @@ public class FileOperations extends Component {
             Path path = Paths.get(readFile.getAbsolutePath());
             System.out.println("readFile path is : " + path);
             try {
-                System.out.println("before");
                 List<String> headerLines = Files.readAllLines(path, Charset.defaultCharset());
                 for (String line : headerLines) {
                     String[] data = line.split(","); // use comma as separator
@@ -38,6 +46,13 @@ public class FileOperations extends Component {
                     String printTxt = invoiceHeader.printInvoiceHeader();
                     System.out.println(printTxt);
                 }
+                invoiceFrame.setHeaderArrayList(headerArrayList);
+                headerTableModel = new HeaderTableModel(headerArrayList);
+                invoiceFrame.setHeaderTableModel(headerTableModel);
+                invoiceFrame.getHeaderTable().setModel(headerTableModel);
+                invoiceFrame.getHeaderTableModel().fireTableDataChanged();
+                System.out.println("test  get data from table after updated -- " +
+                        "user name is : " + headerTableModel.headerArrayList.get(0).customerName);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("wrong file format " + e.getMessage());

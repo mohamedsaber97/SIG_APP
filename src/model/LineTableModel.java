@@ -21,6 +21,12 @@ public class LineTableModel extends AbstractTableModel {
         return cols.length;
     }
 
+    //override method to get name of table cols
+    @Override
+    public String getColumnName(int column) {
+        return cols[column];
+    }
+
     //override method to get data of line table
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -35,9 +41,4 @@ public class LineTableModel extends AbstractTableModel {
         };
     }
 
-    //method to update data into line table
-    public void fireLineData(ArrayList<InvoiceLine> lines) {
-        this.lineArrayList = lines;
-        this.fireTableDataChanged();
-    }
 }

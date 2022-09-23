@@ -12,10 +12,6 @@ public class InvoiceHeader {
 
     double total = 0.0;
 
-    //create default constructor
-    public InvoiceHeader() {
-    }
-
     //constructor for invoiceHeader model
     public InvoiceHeader(String invoiceNum, String invoiceDate, String customerName) {
         this.invoiceNum = invoiceNum;

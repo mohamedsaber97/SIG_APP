@@ -3,10 +3,13 @@ package view;
 import controller.FileMenuListener;
 import controller.InvoiceHeaderListener;
 import controller.InvoiceLineListener;
+import model.HeaderTableModel;
+import model.InvoiceHeader;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 
 public class InvoiceFrame extends JFrame {
@@ -21,7 +24,6 @@ public class InvoiceFrame extends JFrame {
     JTextField dateTxt, nameTxt;
     private JTable headerTable, lineTable;
 
-    DefaultTableModel headerTableModel;
     DefaultTableModel lineTableModel;
 
     //define objects from ActionListeners classes
@@ -29,6 +31,34 @@ public class InvoiceFrame extends JFrame {
     InvoiceHeaderListener headerListener;
     InvoiceLineListener lineListener;
 
+    ArrayList<InvoiceHeader> headerArrayList;
+    HeaderTableModel headerTableModel;
+
+    public JTable getHeaderTable() {
+        return headerTable;
+    }
+
+    public ArrayList<InvoiceHeader> getHeaderArrayList() {
+        if (headerArrayList == null) {
+            headerArrayList = new ArrayList<>();
+        }
+        return headerArrayList;
+    }
+
+    public void setHeaderArrayList(ArrayList<InvoiceHeader> headerArrayList) {
+        this.headerArrayList = headerArrayList;
+    }
+
+    public HeaderTableModel getHeaderTableModel() {
+        if (headerTableModel == null) {
+            headerTableModel = new HeaderTableModel(getHeaderArrayList());
+        }
+        return headerTableModel;
+    }
+
+    public void setHeaderTableModel(HeaderTableModel headerTableModel) {
+        this.headerTableModel = headerTableModel;
+    }
 
     //constructor for invoiceFrame creation
     public InvoiceFrame() {
@@ -40,7 +70,7 @@ public class InvoiceFrame extends JFrame {
         setLayout(new GridLayout(1, 2));
 
         //declaration for objects from ActionListener classes
-        menuListener = new FileMenuListener();
+        menuListener = new FileMenuListener(this);
         headerListener = new InvoiceHeaderListener();
         lineListener = new InvoiceLineListener();
 
@@ -107,12 +137,12 @@ public class InvoiceFrame extends JFrame {
 
     //method to draw header invoice table
     void drawHeaderTable() {
-
-        String[] cols = {"No.", "Date", "Customer", "Total"};
-        int rows = 4;
-        headerTableModel = new DefaultTableModel(rows, cols.length);
-        headerTableModel.setColumnIdentifiers(cols);
-        headerTable = new JTable(headerTableModel);
+        headerTable = new JTable();
+        headerTable.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{}
+        ));
+        headerTable.setModel(getHeaderTableModel());
     }
 
     //method to draw line invoice panel
