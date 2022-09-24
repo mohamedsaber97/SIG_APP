@@ -1,6 +1,6 @@
 package view;
 
-import controller.FileMenuListener;
+import model.FileOperations;
 import controller.InvoiceHeaderListener;
 import controller.InvoiceLineListener;
 import model.HeaderTableModel;
@@ -21,13 +21,12 @@ public class InvoiceFrame extends JFrame {
     private JPanel headerPanel, linePanel, dataPanel;
     JButton addBtn, deleteBtn, saveBtn, cancelBtn;
     JLabel numberLbl, numberValueLbl, dateLbl, nameLbl, totalLbl, totalValueLbl, itemsLbl;
-    JTextField dateTxt, nameTxt;
+    JTextField dateTxt, customerNameTxt;
     private JTable headerTable, lineTable;
 
-    DefaultTableModel lineTableModel;
 
     //define objects from ActionListeners classes
-    FileMenuListener menuListener;
+    FileOperations fileOperations;
     InvoiceHeaderListener headerListener;
     InvoiceLineListener lineListener;
 
@@ -60,6 +59,26 @@ public class InvoiceFrame extends JFrame {
         this.headerTableModel = headerTableModel;
     }
 
+    public JTable getLineTable() {
+        return lineTable;
+    }
+
+    public JLabel getNumberValueLbl() {
+        return numberValueLbl;
+    }
+
+    public JLabel getTotalValueLbl() {
+        return totalValueLbl;
+    }
+
+    public JTextField getDateTxt() {
+        return dateTxt;
+    }
+
+    public JTextField getCustomerNameTxt() {
+        return customerNameTxt;
+    }
+
     //constructor for invoiceFrame creation
     public InvoiceFrame() {
 
@@ -70,7 +89,7 @@ public class InvoiceFrame extends JFrame {
         setLayout(new GridLayout(1, 2));
 
         //declaration for objects from ActionListener classes
-        menuListener = new FileMenuListener(this);
+        fileOperations = new FileOperations(this);
         headerListener = new InvoiceHeaderListener();
         lineListener = new InvoiceLineListener();
 
@@ -95,15 +114,15 @@ public class InvoiceFrame extends JFrame {
         fileMenu = new JMenu("File");
 
         loadFileItem = new JMenuItem("Load File", 'L');
-        loadFileItem.addActionListener(menuListener);
+        loadFileItem.addActionListener(fileOperations);
         loadFileItem.setActionCommand("load");
 
         saveFileItem = new JMenuItem("Save File", 'S');
-        saveFileItem.addActionListener(menuListener);
+        saveFileItem.addActionListener(fileOperations);
         saveFileItem.setActionCommand("save");
 
         exitItem = new JMenuItem("Exit", 'E');
-        exitItem.addActionListener(menuListener);
+        exitItem.addActionListener(fileOperations);
         exitItem.setActionCommand("exit");
 
         fileMenu.add(loadFileItem);
@@ -155,7 +174,7 @@ public class InvoiceFrame extends JFrame {
         numberLbl.setBounds(20, 10, 100, 30);
         linePanel.add(numberLbl);
 
-        numberValueLbl = new JLabel(String.valueOf(23));
+        numberValueLbl = new JLabel();
         numberValueLbl.setBounds(140, 10, 100, 30);
         linePanel.add(numberValueLbl);
 
@@ -165,21 +184,23 @@ public class InvoiceFrame extends JFrame {
 
         dateTxt = new JTextField(15);
         dateTxt.setBounds(140, 55, 300, 25);
+        dateTxt.setEditable(false);
         linePanel.add(dateTxt);
 
         nameLbl = new JLabel("Customer Name");
         nameLbl.setBounds(20, 90, 100, 30);
         linePanel.add(nameLbl);
 
-        nameTxt = new JTextField(15);
-        nameTxt.setBounds(140, 95, 300, 25);
-        linePanel.add(nameTxt);
+        customerNameTxt = new JTextField(15);
+        customerNameTxt.setBounds(140, 95, 300, 25);
+        customerNameTxt.setEditable(false);
+        linePanel.add(customerNameTxt);
 
         totalLbl = new JLabel("Invoice Total");
         totalLbl.setBounds(20, 130, 100, 30);
         linePanel.add(totalLbl);
 
-        totalValueLbl = new JLabel(String.valueOf(350.50));
+        totalValueLbl = new JLabel();
         totalValueLbl.setBounds(140, 130, 100, 30);
         linePanel.add(totalValueLbl);
 
@@ -219,9 +240,15 @@ public class InvoiceFrame extends JFrame {
     void drawLineTable() {
         String[] cols = {"No.", "Item Name", "Item Price", "Count", "Total"};
         int rows = 4;
-        lineTableModel = new DefaultTableModel(rows, cols.length);
-        lineTableModel.setColumnIdentifiers(cols);
-        lineTable = new JTable(lineTableModel);
+        DefaultTableModel lineTableModel2 = new DefaultTableModel(rows, cols.length);
+        lineTableModel2.setColumnIdentifiers(cols);
+        lineTable = new JTable(lineTableModel2);
+
+//        lineTable = new JTable();
+//        lineTable.setModel(new DefaultTableModel(
+//                new Object[][]{},
+//                new String[]{}
+//        ));
     }
 
 }

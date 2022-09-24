@@ -9,6 +9,10 @@ public class LineTableModel extends AbstractTableModel {
     String[] cols = {"No.", "Item Name", "Item Price", "Count", "Total"};
     ArrayList<InvoiceLine> lineArrayList;
 
+    public LineTableModel(ArrayList<InvoiceLine> lineArrayList) {
+        this.lineArrayList = lineArrayList;
+    }
+
     //override method to get size of table rows
     @Override
     public int getRowCount() {

@@ -3,7 +3,10 @@ package model;
 import view.InvoiceFrame;
 
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -13,28 +16,29 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileOperations extends Component {
+public class FileOperations implements ActionListener, ListSelectionListener {
 
     //define data to access invoice header and line files
     JFileChooser readFileChooser, writeFileChooser;
-    int readResult, writeResult;
+    int readResult, saveResult;
     File readFile1, readFile2, writeFile;
     InvoiceHeader invoiceHeader;
-    InvoiceLine invoiceLine;
     ArrayList<InvoiceHeader> headerArrayList = new ArrayList<>();
     HeaderTableModel headerTableModel;
+    InvoiceLine invoiceLine;
+    LineTableModel lineTableModel;
     InvoiceFrame invoiceFrame;
 
-    //create constructor to receive InvoiceFrame Object
+    //create constructor to get receive InvoiceFrame object and send it to FileOperation class
     public FileOperations(InvoiceFrame invoiceFrame) {
         this.invoiceFrame = invoiceFrame;
     }
 
     //method to read invoice header data from .csv file
-    public ArrayList<InvoiceHeader> readFile() {
+    public void readFiles() {
         readFileChooser = new JFileChooser();
         try {
-            readResult = readFileChooser.showOpenDialog(this);
+            readResult = readFileChooser.showOpenDialog(invoiceFrame);
             if (readResult == JFileChooser.APPROVE_OPTION) {
                 readFile1 = readFileChooser.getSelectedFile();  //save file path
                 Path path = Paths.get(readFile1.getAbsolutePath());
@@ -49,12 +53,12 @@ public class FileOperations extends Component {
                         System.out.println(printTxt);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        JOptionPane.showMessageDialog(this, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(invoiceFrame, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
                         System.exit(0);
                     }
                 }
                 System.out.println("-----end of read first file-----");
-                readResult = readFileChooser.showOpenDialog(this);
+                readResult = readFileChooser.showOpenDialog(invoiceFrame);
                 if (readResult == JFileChooser.APPROVE_OPTION) {
                     readFile2 = readFileChooser.getSelectedFile();  //save file path
                     Path path2 = Paths.get(readFile2.getAbsolutePath());
@@ -82,7 +86,7 @@ public class FileOperations extends Component {
                             System.out.println(printTxt);
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            JOptionPane.showMessageDialog(this, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(invoiceFrame, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
                             System.exit(0);
                         }
                     }
@@ -99,20 +103,44 @@ public class FileOperations extends Component {
 
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "can’t read file", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(invoiceFrame, "can’t read file", "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
         }
-        return headerArrayList;
     }
 
-
     //method to write invoice header data to .csv file
-    public ArrayList<InvoiceHeader> writeFile() {
+    public void saveFiles() {
         writeFileChooser = new JFileChooser();
-        writeResult = writeFileChooser.showOpenDialog(this);
-        if (writeResult == JFileChooser.APPROVE_OPTION) {
+        saveResult = writeFileChooser.showOpenDialog(invoiceFrame);
+        if (saveResult == JFileChooser.APPROVE_OPTION) {
             writeFile = writeFileChooser.getSelectedFile();
             System.out.println("writeFile path is : " + writeFile);
         }
-        return null;
+    }
+
+    //method to implement actions on file menu
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "load" -> readFiles();
+            case "save" -> saveFiles();
+            case "exit" -> System.exit(0);
+        }
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        int selectedIndex = invoiceFrame.getHeaderTable().getSelectedRow();
+        if (selectedIndex != -1) {
+            System.out.println("you select row number : " + selectedIndex);
+            InvoiceHeader selectedInvoice = invoiceFrame.getHeaderArrayList().get(selectedIndex);
+            invoiceFrame.getNumberValueLbl().setText(selectedInvoice.invoiceNum);
+            invoiceFrame.getDateTxt().setText(selectedInvoice.invoiceDate);
+            invoiceFrame.getCustomerNameTxt().setText(selectedInvoice.customerName);
+            invoiceFrame.getTotalValueLbl().setText(String.valueOf(selectedInvoice.total));
+            lineTableModel = new LineTableModel(selectedInvoice.getInvoiceLines());
+            invoiceFrame.getLineTable().setModel(lineTableModel);
+            lineTableModel.fireTableDataChanged();
+        }
     }
 }
