@@ -29,6 +29,33 @@ public class FileOperations implements ActionListener, ListSelectionListener {
     LineTableModel lineTableModel;
     InvoiceFrame invoiceFrame;
 
+    //method to implement actions on file menu
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "load" -> readFiles();
+            case "save" -> saveFiles();
+            case "exit" -> System.exit(0);
+        }
+    }
+
+    //method to show InvoiceLine data after select header index
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        int selectedIndex = invoiceFrame.getHeaderTable().getSelectedRow();
+        if (selectedIndex != -1) {
+            System.out.println("you select row number : " + selectedIndex);
+            InvoiceHeader selectedInvoice = invoiceFrame.getHeaderArrayList().get(selectedIndex);
+            invoiceFrame.getNumberValueLbl().setText(selectedInvoice.invoiceNum);
+            invoiceFrame.getDateTxt().setText(selectedInvoice.invoiceDate);
+            invoiceFrame.getCustomerNameTxt().setText(selectedInvoice.customerName);
+            invoiceFrame.getTotalValueLbl().setText(String.valueOf(selectedInvoice.total));
+            lineTableModel = new LineTableModel(selectedInvoice.getInvoiceLines());
+            invoiceFrame.getLineTable().setModel(lineTableModel);
+            lineTableModel.fireTableDataChanged();
+        }
+    }
+
     //create constructor to get receive InvoiceFrame object and send it to FileOperation class
     public FileOperations(InvoiceFrame invoiceFrame) {
         this.invoiceFrame = invoiceFrame;
@@ -118,29 +145,4 @@ public class FileOperations implements ActionListener, ListSelectionListener {
         }
     }
 
-    //method to implement actions on file menu
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "load" -> readFiles();
-            case "save" -> saveFiles();
-            case "exit" -> System.exit(0);
-        }
-    }
-
-    @Override
-    public void valueChanged(ListSelectionEvent e) {
-        int selectedIndex = invoiceFrame.getHeaderTable().getSelectedRow();
-        if (selectedIndex != -1) {
-            System.out.println("you select row number : " + selectedIndex);
-            InvoiceHeader selectedInvoice = invoiceFrame.getHeaderArrayList().get(selectedIndex);
-            invoiceFrame.getNumberValueLbl().setText(selectedInvoice.invoiceNum);
-            invoiceFrame.getDateTxt().setText(selectedInvoice.invoiceDate);
-            invoiceFrame.getCustomerNameTxt().setText(selectedInvoice.customerName);
-            invoiceFrame.getTotalValueLbl().setText(String.valueOf(selectedInvoice.total));
-            lineTableModel = new LineTableModel(selectedInvoice.getInvoiceLines());
-            invoiceFrame.getLineTable().setModel(lineTableModel);
-            lineTableModel.fireTableDataChanged();
-        }
-    }
 }

@@ -29,10 +29,10 @@ public class InvoiceFrame extends JFrame {
     FileOperations fileOperations;
     InvoiceHeaderListener headerListener;
     InvoiceLineListener lineListener;
-
     ArrayList<InvoiceHeader> headerArrayList;
     HeaderTableModel headerTableModel;
 
+    //define properties for all data
     public JTable getHeaderTable() {
         return headerTable;
     }
@@ -162,6 +162,7 @@ public class InvoiceFrame extends JFrame {
                 new String[]{}
         ));
         headerTable.setModel(getHeaderTableModel());
+        headerTable.getSelectionModel().addListSelectionListener(fileOperations);
     }
 
     //method to draw line invoice panel
@@ -232,23 +233,17 @@ public class InvoiceFrame extends JFrame {
     void drawDataPanel() {
         dataPanel = new JPanel();
         dataPanel.setLayout(new GridLayout());
-        drawLineTable();
+        drawDefaultLineTable();
         dataPanel.add(new JScrollPane(lineTable));
     }
 
     //method to draw line invoice table
-    void drawLineTable() {
+    void drawDefaultLineTable() {
         String[] cols = {"No.", "Item Name", "Item Price", "Count", "Total"};
         int rows = 4;
-        DefaultTableModel lineTableModel2 = new DefaultTableModel(rows, cols.length);
-        lineTableModel2.setColumnIdentifiers(cols);
-        lineTable = new JTable(lineTableModel2);
-
-//        lineTable = new JTable();
-//        lineTable.setModel(new DefaultTableModel(
-//                new Object[][]{},
-//                new String[]{}
-//        ));
+        DefaultTableModel defaultLineTable = new DefaultTableModel(rows, cols.length);
+        defaultLineTable.setColumnIdentifiers(cols);
+        lineTable = new JTable(defaultLineTable);
     }
 
 }
