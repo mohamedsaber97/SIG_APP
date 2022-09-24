@@ -18,8 +18,9 @@ public class FileOperations extends Component {
     //define data to access invoice header and line files
     JFileChooser readFileChooser, writeFileChooser;
     int readResult, writeResult;
-    File readFile, writeFile;
+    File readFile1, readFile2, writeFile;
     InvoiceHeader invoiceHeader;
+    InvoiceLine invoiceLine;
     ArrayList<InvoiceHeader> headerArrayList = new ArrayList<>();
     HeaderTableModel headerTableModel;
     InvoiceFrame invoiceFrame;
@@ -32,35 +33,77 @@ public class FileOperations extends Component {
     //method to read invoice header data from .csv file
     public ArrayList<InvoiceHeader> readFile() {
         readFileChooser = new JFileChooser();
-        readResult = readFileChooser.showOpenDialog(this);
-        if (readResult == JFileChooser.APPROVE_OPTION) {
-            readFile = readFileChooser.getSelectedFile();  //save file path
-            Path path = Paths.get(readFile.getAbsolutePath());
-            System.out.println("readFile path is : " + path);
-            try {
+        try {
+            readResult = readFileChooser.showOpenDialog(this);
+            if (readResult == JFileChooser.APPROVE_OPTION) {
+                readFile1 = readFileChooser.getSelectedFile();  //save file path
+                Path path = Paths.get(readFile1.getAbsolutePath());
+                System.out.println("readFile1 path is : " + path);
                 List<String> headerLines = Files.readAllLines(path, Charset.defaultCharset());
                 for (String line : headerLines) {
-                    String[] data = line.split(","); // use comma as separator
-                    invoiceHeader = new InvoiceHeader(data[0], data[1], data[2]); //update data to invoiceHeader model
-                    headerArrayList.add(invoiceHeader);
-                    String printTxt = invoiceHeader.printInvoiceHeader();
-                    System.out.println(printTxt);
+                    try {
+                        String[] dataHeader = line.split(","); // use comma as separator
+                        invoiceHeader = new InvoiceHeader(dataHeader[0], dataHeader[1], dataHeader[2]); //update data to invoiceHeader model
+                        headerArrayList.add(invoiceHeader);
+                        String printTxt = invoiceHeader.printInvoiceHeader();
+                        System.out.println(printTxt);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
+                        System.exit(0);
+                    }
+                }
+                System.out.println("-----end of read first file-----");
+                readResult = readFileChooser.showOpenDialog(this);
+                if (readResult == JFileChooser.APPROVE_OPTION) {
+                    readFile2 = readFileChooser.getSelectedFile();  //save file path
+                    Path path2 = Paths.get(readFile2.getAbsolutePath());
+                    System.out.println("readFile2 path is : " + path);
+                    List<String> dataLines = Files.readAllLines(path2, Charset.defaultCharset());
+                    for (String line : dataLines) {
+                        try {
+                            String[] dataLine = line.split(","); // use comma as separator
+                            String headerNum = dataLine[0];
+                            String itemName = dataLine[1];
+                            double itemPrice = Double.parseDouble(dataLine[2]);
+                            int count = Integer.parseInt(dataLine[3]);
+                            InvoiceHeader invHeader = null;
+                            for (InvoiceHeader header : headerArrayList) {
+                                if (header.getInvoiceNum().equals(headerNum)) {
+                                    invHeader = header;
+                                    break;
+                                }
+                            }
+                            invoiceLine = new InvoiceLine(itemName, itemPrice, count, invHeader); //update data to invoiceHeader model
+                            if (invHeader != null) {
+                                invHeader.getInvoiceLines().add(invoiceLine);
+                            }
+                            String printTxt = invoiceLine.printInvoiceLine();
+                            System.out.println(printTxt);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            JOptionPane.showMessageDialog(this, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
+                            System.exit(0);
+                        }
+                    }
+                    System.out.println("-----end of read second file-----");
                 }
                 invoiceFrame.setHeaderArrayList(headerArrayList);
                 headerTableModel = new HeaderTableModel(headerArrayList);
                 invoiceFrame.setHeaderTableModel(headerTableModel);
                 invoiceFrame.getHeaderTable().setModel(headerTableModel);
                 invoiceFrame.getHeaderTableModel().fireTableDataChanged();
-                System.out.println("test  get data from table after updated -- " +
-                        "user name is : " + headerTableModel.headerArrayList.get(0).customerName);
-            } catch (ArrayIndexOutOfBoundsException | IOException e) {
-                e.printStackTrace();
-                System.out.println("wrong file format " + e.getMessage());
+                System.out.println("-----test get data from table after updated -- " +
+                        "user name is : " + headerTableModel.headerArrayList.get(0).customerName + "-----");
             }
-        }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "can’t read file", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         return headerArrayList;
     }
+
 
     //method to write invoice header data to .csv file
     public ArrayList<InvoiceHeader> writeFile() {
