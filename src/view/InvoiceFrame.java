@@ -1,6 +1,6 @@
 package view;
 
-import model.FileOperations;
+import controller.FileOperations;
 import controller.InvoiceHeaderListener;
 import controller.InvoiceLineListener;
 import model.HeaderTableModel;

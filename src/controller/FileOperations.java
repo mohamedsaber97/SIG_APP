@@ -1,5 +1,9 @@
-package model;
+package controller;
 
+import model.HeaderTableModel;
+import model.InvoiceHeader;
+import model.InvoiceLine;
+import model.LineTableModel;
 import view.InvoiceFrame;
 
 import javax.swing.*;
@@ -46,10 +50,10 @@ public class FileOperations implements ActionListener, ListSelectionListener {
         if (selectedIndex != -1) {
             System.out.println("you select row number : " + selectedIndex);
             InvoiceHeader selectedInvoice = invoiceFrame.getHeaderArrayList().get(selectedIndex);
-            invoiceFrame.getNumberValueLbl().setText(selectedInvoice.invoiceNum);
-            invoiceFrame.getDateTxt().setText(selectedInvoice.invoiceDate);
-            invoiceFrame.getCustomerNameTxt().setText(selectedInvoice.customerName);
-            invoiceFrame.getTotalValueLbl().setText(String.valueOf(selectedInvoice.total));
+            invoiceFrame.getNumberValueLbl().setText(selectedInvoice.getInvoiceNum());
+            invoiceFrame.getDateTxt().setText(selectedInvoice.getInvoiceDate());
+            invoiceFrame.getCustomerNameTxt().setText(selectedInvoice.getCustomerName());
+            invoiceFrame.getTotalValueLbl().setText(String.valueOf(selectedInvoice.getHeaderTotal()));
             lineTableModel = new LineTableModel(selectedInvoice.getInvoiceLines());
             invoiceFrame.getLineTable().setModel(lineTableModel);
             lineTableModel.fireTableDataChanged();
@@ -124,8 +128,6 @@ public class FileOperations implements ActionListener, ListSelectionListener {
                 invoiceFrame.setHeaderTableModel(headerTableModel);
                 invoiceFrame.getHeaderTable().setModel(headerTableModel);
                 invoiceFrame.getHeaderTableModel().fireTableDataChanged();
-                System.out.println("-----test get data from table after updated -- " +
-                        "user name is : " + headerTableModel.headerArrayList.get(0).customerName + "-----");
             }
 
         } catch (IOException e) {

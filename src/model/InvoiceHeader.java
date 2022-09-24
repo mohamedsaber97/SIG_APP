@@ -49,7 +49,7 @@ public class InvoiceHeader {
 
     //method to print header table data
     public String printInvoiceHeader() {
-        return "InvoiceHeader\n{\n" + "invoiceNum = " + invoiceNum
+        return "InvoiceHeader \n{\n" + "invoiceNum = " + invoiceNum
                 + " , invoiceDate = " + invoiceDate + " , customerName = " + customerName + "\n}";
     }
 }
