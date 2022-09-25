@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class InvoiceHeader {
 
     //definition of invoice header data
-    String invoiceNum;
+    int invoiceNum;
     String invoiceDate;
     String customerName;
     ArrayList<InvoiceLine> invoiceLines;
@@ -13,14 +13,14 @@ public class InvoiceHeader {
     double total = 0.0;
 
     //constructor for invoiceHeader model
-    public InvoiceHeader(String invoiceNum, String invoiceDate, String customerName) {
+    public InvoiceHeader(int invoiceNum, String invoiceDate, String customerName) {
         this.invoiceNum = invoiceNum;
         this.invoiceDate = invoiceDate;
         this.customerName = customerName;
     }
 
     //properties to get updated data of invoiceHeader
-    public String getInvoiceNum() {
+    public int getInvoiceNum() {
         return invoiceNum;
     }
 
@@ -45,6 +45,11 @@ public class InvoiceHeader {
             total += invoiceLine.getLineTotal();
         }
         return total;
+    }
+
+    //method to get header data as csv format
+    public String getHeaderCsv() {
+        return invoiceNum + "," + invoiceDate + "," + customerName;
     }
 
     //method to print header table data

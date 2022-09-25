@@ -8,9 +8,6 @@ public class InvoiceLine {
     int count;
     InvoiceHeader invoiceHeader;
 
-    public InvoiceLine() {
-    }
-
     //constructor for invoiceLine
     public InvoiceLine(String itemName, double itemPrice, int count, InvoiceHeader invoiceHeader) {
         this.itemName = itemName;
@@ -38,6 +35,11 @@ public class InvoiceLine {
 
     public double getLineTotal() {
         return itemPrice * count;
+    }
+
+    //method to get line data as csv format
+    public String getLineCsv() {
+        return invoiceHeader.getInvoiceNum() + "," + itemName + "," + itemPrice + "," + count;
     }
 
     //method to print line table data
