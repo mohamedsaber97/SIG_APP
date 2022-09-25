@@ -1,8 +1,6 @@
 package view;
 
 import controller.FileOperations;
-import controller.InvoiceHeaderListener;
-import controller.InvoiceLineListener;
 import model.HeaderTableModel;
 import model.InvoiceHeader;
 
@@ -27,8 +25,6 @@ public class InvoiceFrame extends JFrame {
 
     //define objects from ActionListeners classes
     FileOperations fileOperations;
-    InvoiceHeaderListener headerListener;
-    InvoiceLineListener lineListener;
     ArrayList<InvoiceHeader> headerArrayList;
     HeaderTableModel headerTableModel;
 
@@ -90,8 +86,6 @@ public class InvoiceFrame extends JFrame {
 
         //declaration for objects from ActionListener classes
         fileOperations = new FileOperations(this);
-        headerListener = new InvoiceHeaderListener();
-        lineListener = new InvoiceLineListener();
 
         //declaration invoice menuBar
         menuBar = new JMenuBar();
@@ -115,11 +109,11 @@ public class InvoiceFrame extends JFrame {
 
         loadFileItem = new JMenuItem("Load File", 'L');
         loadFileItem.addActionListener(fileOperations);
-        loadFileItem.setActionCommand("load");
+        loadFileItem.setActionCommand("loadFile");
 
         saveFileItem = new JMenuItem("Save File", 'S');
         saveFileItem.addActionListener(fileOperations);
-        saveFileItem.setActionCommand("save");
+        saveFileItem.setActionCommand("saveFile");
 
         exitItem = new JMenuItem("Exit", 'E');
         exitItem.addActionListener(fileOperations);
@@ -145,12 +139,12 @@ public class InvoiceFrame extends JFrame {
 
         addBtn = new JButton("Create New Invoice");
         addBtn.setActionCommand("add");
-        addBtn.addActionListener(headerListener);
+        addBtn.addActionListener(fileOperations);
         headerPanel.add(addBtn);
 
         deleteBtn = new JButton("Delete Invoice");
         deleteBtn.setActionCommand("delete");
-        deleteBtn.addActionListener(headerListener);
+        deleteBtn.addActionListener(fileOperations);
         headerPanel.add(deleteBtn);
     }
 
@@ -218,13 +212,13 @@ public class InvoiceFrame extends JFrame {
         saveBtn = new JButton("Save");
         saveBtn.setBounds(100, 550, 100, 30);
         saveBtn.setActionCommand("save");
-        saveBtn.addActionListener(lineListener);
+        saveBtn.addActionListener(fileOperations);
         linePanel.add(saveBtn);
 
         cancelBtn = new JButton("Cancel");
         cancelBtn.setBounds(250, 550, 100, 30);
         cancelBtn.setActionCommand("cancel");
-        cancelBtn.addActionListener(lineListener);
+        cancelBtn.addActionListener(fileOperations);
         linePanel.add(cancelBtn);
 
     }

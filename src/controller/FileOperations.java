@@ -37,9 +37,13 @@ public class FileOperations implements ActionListener, ListSelectionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "load" -> readFiles();
-            case "save" -> writeFiles();
+            case "loadFile" -> readFiles();
+            case "saveFile" -> writeFiles();
             case "exit" -> System.exit(0);
+            case "add" -> System.out.println("we add data to csv file");
+            case "delete" -> deleteSelectedInvoice();
+            case "save" -> System.out.println("we save data to csv file");
+            case "cancel" -> System.out.println("we cancel data from csv file");
         }
     }
 
@@ -171,7 +175,7 @@ public class FileOperations implements ActionListener, ListSelectionListener {
                     lineWriter.write(lines.toString());
                     lineWriter.flush();
                     lineWriter.close();
-                    System.out.println("-----data saved to InvoiceHeader.csv-----");
+                    System.out.println("-----data saved to InvoiceLine.csv-----");
                 }
             }
         } catch (Exception ex) {
@@ -179,7 +183,18 @@ public class FileOperations implements ActionListener, ListSelectionListener {
             JOptionPane.showMessageDialog(invoiceFrame, "can’t save file", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
+    }
 
+    //method to delete invoiceHeader from HeaderTable
+    private void deleteSelectedInvoice() {
+        int selectedRow = invoiceFrame.getHeaderTable().getSelectedRow();
+        if (selectedRow != -1) {
+            invoiceFrame.getHeaderArrayList().remove(selectedRow);
+            invoiceFrame.getHeaderTableModel().fireTableDataChanged();
+            System.out.println("-----invoice number : " + selectedRow + "is deleted successfully-----");
+        } else {
+            JOptionPane.showMessageDialog(invoiceFrame, "you must select one header invoice at least", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
 }
