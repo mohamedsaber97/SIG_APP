@@ -75,6 +75,10 @@ public class InvoiceFrame extends JFrame {
         return customerNameTxt;
     }
 
+    public FileOperations getFileOperations() {
+        return fileOperations;
+    }
+
     //constructor for invoiceFrame creation
     public InvoiceFrame() {
 
@@ -138,12 +142,12 @@ public class InvoiceFrame extends JFrame {
         headerPanel.add(new JScrollPane(headerTable));
 
         addBtn = new JButton("Create New Invoice");
-        addBtn.setActionCommand("add");
+        addBtn.setActionCommand("createHeader");
         addBtn.addActionListener(fileOperations);
         headerPanel.add(addBtn);
 
         deleteBtn = new JButton("Delete Invoice");
-        deleteBtn.setActionCommand("delete");
+        deleteBtn.setActionCommand("deleteHeader");
         deleteBtn.addActionListener(fileOperations);
         headerPanel.add(deleteBtn);
     }
@@ -211,13 +215,13 @@ public class InvoiceFrame extends JFrame {
 
         saveBtn = new JButton("Save");
         saveBtn.setBounds(100, 550, 100, 30);
-        saveBtn.setActionCommand("save");
+        saveBtn.setActionCommand("saveLine");
         saveBtn.addActionListener(fileOperations);
         linePanel.add(saveBtn);
 
         cancelBtn = new JButton("Cancel");
         cancelBtn.setBounds(250, 550, 100, 30);
-        cancelBtn.setActionCommand("cancel");
+        cancelBtn.setActionCommand("cancelLine");
         cancelBtn.addActionListener(fileOperations);
         linePanel.add(cancelBtn);
 
@@ -238,6 +242,16 @@ public class InvoiceFrame extends JFrame {
         DefaultTableModel defaultLineTable = new DefaultTableModel(rows, cols.length);
         defaultLineTable.setColumnIdentifiers(cols);
         lineTable = new JTable(defaultLineTable);
+    }
+
+    //method to add new invoice in new index of table
+    public int getNextInvoiceNum() {
+        int num = 0;
+        for (InvoiceHeader header : getHeaderArrayList()) {
+            if (header.getInvoiceNum() > num)
+                num = header.getInvoiceNum();
+        }
+        return ++num;
     }
 
 }

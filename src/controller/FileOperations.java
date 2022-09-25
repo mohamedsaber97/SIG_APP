@@ -4,6 +4,7 @@ import model.HeaderTableModel;
 import model.InvoiceHeader;
 import model.InvoiceLine;
 import model.LineTableModel;
+import view.HeaderInvoiceDialog;
 import view.InvoiceFrame;
 
 import javax.swing.*;
@@ -32,6 +33,7 @@ public class FileOperations implements ActionListener, ListSelectionListener {
     InvoiceLine invoiceLine;
     LineTableModel lineTableModel;
     InvoiceFrame invoiceFrame;
+    HeaderInvoiceDialog invoiceDialog;
 
     //method to implement actions on file menu
     @Override
@@ -40,10 +42,12 @@ public class FileOperations implements ActionListener, ListSelectionListener {
             case "loadFile" -> readFiles();
             case "saveFile" -> writeFiles();
             case "exit" -> System.exit(0);
-            case "add" -> System.out.println("we add data to csv file");
-            case "delete" -> deleteSelectedInvoice();
-            case "save" -> System.out.println("we save data to csv file");
-            case "cancel" -> System.out.println("we cancel data from csv file");
+            case "createHeader" -> createHeaderInvoice();
+            case "deleteHeader" -> deleteSelectedInvoice();
+            case "submitHeaderDialog" -> submitHeaderDialog();
+            case "cancelHeaderDialog" -> cancelHeaderDialog();
+            case "saveLine" -> System.out.println("we save data to csv file");
+            case "cancelLine" -> System.out.println("we cancel data from csv file");
         }
     }
 
@@ -185,15 +189,59 @@ public class FileOperations implements ActionListener, ListSelectionListener {
         }
     }
 
+    private void createHeaderInvoice() {
+        invoiceDialog = new HeaderInvoiceDialog(invoiceFrame);
+        invoiceDialog.setVisible(true);
+    }
+
     //method to delete invoiceHeader from HeaderTable
     private void deleteSelectedInvoice() {
         int selectedRow = invoiceFrame.getHeaderTable().getSelectedRow();
         if (selectedRow != -1) {
             invoiceFrame.getHeaderArrayList().remove(selectedRow);
             invoiceFrame.getHeaderTableModel().fireTableDataChanged();
+
+            //clear data after delete invoice
+            invoiceFrame.getNumberValueLbl().setText(null);
+            invoiceFrame.getDateTxt().setText(null);
+            invoiceFrame.getCustomerNameTxt().setText(null);
+            invoiceFrame.getTotalValueLbl().setText(null);
             System.out.println("-----invoice number : " + selectedRow + "is deleted successfully-----");
         } else {
             JOptionPane.showMessageDialog(invoiceFrame, "you must select one header invoice at least", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    //method to cancel creation of HeaderInvoice
+    private void cancelHeaderDialog() {
+        invoiceDialog.setVisible(false);
+        invoiceDialog.dispose();
+        invoiceDialog = null;
+    }
+
+    //method to submit creation of HeaderInvoice
+    private void submitHeaderDialog() {
+        String date = invoiceDialog.getDateTxt().getText();
+        String customer = invoiceDialog.getCustomerNameTxt().getText();
+        int num = invoiceFrame.getNextInvoiceNum();
+        try {
+            String[] dateParts = date.split("-");  // "22-05-2013" -> {"22", "05", "2013"}  xy-qw-20ij
+            int day = Integer.parseInt(dateParts[0]);
+            int month = Integer.parseInt(dateParts[1]);
+            if (date.isEmpty() || customer.isEmpty()) {
+                JOptionPane.showMessageDialog(invoiceFrame, "you must enter all data", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else if (dateParts.length < 3 || day > 31 || month > 12) {
+                JOptionPane.showMessageDialog(invoiceFrame, "Wrong date format", "Warning", JOptionPane.WARNING_MESSAGE);
+            } else {
+                InvoiceHeader invoiceHeader = new InvoiceHeader(num, date, customer);
+                invoiceFrame.getHeaderArrayList().add(invoiceHeader);
+                invoiceFrame.getHeaderTableModel().fireTableDataChanged();
+                invoiceDialog.setVisible(false);
+                invoiceDialog.dispose();
+                invoiceDialog = null;
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(invoiceFrame, "Wrong date format", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
