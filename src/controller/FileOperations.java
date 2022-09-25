@@ -4,7 +4,7 @@ import model.HeaderTableModel;
 import model.InvoiceHeader;
 import model.InvoiceLine;
 import model.LineTableModel;
-import view.HeaderInvoiceDialog;
+import view.HeaderDialog;
 import view.InvoiceFrame;
 
 import javax.swing.*;
@@ -33,7 +33,7 @@ public class FileOperations implements ActionListener, ListSelectionListener {
     InvoiceLine invoiceLine;
     LineTableModel lineTableModel;
     InvoiceFrame invoiceFrame;
-    HeaderInvoiceDialog invoiceDialog;
+    HeaderDialog invoiceDialog;
 
     //method to implement actions on file menu
     @Override
@@ -190,7 +190,7 @@ public class FileOperations implements ActionListener, ListSelectionListener {
     }
 
     private void createHeaderInvoice() {
-        invoiceDialog = new HeaderInvoiceDialog(invoiceFrame);
+        invoiceDialog = new HeaderDialog(invoiceFrame);
         invoiceDialog.setVisible(true);
     }
 

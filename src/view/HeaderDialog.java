@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class HeaderInvoiceDialog extends JDialog {
+public class HeaderDialog extends JDialog {
 
     //definition for all dialog data
     JLabel customerNameLbl, dateLbl;
@@ -19,14 +19,14 @@ public class HeaderInvoiceDialog extends JDialog {
     }
 
     //constructor for invoice creation dialog creation
-    public HeaderInvoiceDialog(InvoiceFrame invoiceFrame) {
+    public HeaderDialog(InvoiceFrame invoiceFrame) {
         setLocation(300, 300);
         setLayout(new GridLayout(3, 2));
         setTitle("Create Header Invoice");
 
         customerNameLbl = new JLabel("Customer Name : ");
         customerNameTxt = new JTextField(20);
-        customerNameLbl.setBounds(10, 30, 50, 100);
+
         dateLbl = new JLabel("Invoice Date : ");
         dateTxt = new JTextField(20);
 
