@@ -96,7 +96,7 @@ public class FileOperations implements ActionListener, ListSelectionListener {
                         System.out.println(printTxt);
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        JOptionPane.showMessageDialog(invoiceFrame, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(invoiceFrame, "Error in header file format", "Error", JOptionPane.ERROR_MESSAGE);
                         System.exit(0);
                     }
                 }
@@ -129,7 +129,7 @@ public class FileOperations implements ActionListener, ListSelectionListener {
                             System.out.println(printTxt);
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            JOptionPane.showMessageDialog(invoiceFrame, "Error in line format", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(invoiceFrame, "Error in line file format", "Error", JOptionPane.ERROR_MESSAGE);
                             System.exit(0);
                         }
                     }
