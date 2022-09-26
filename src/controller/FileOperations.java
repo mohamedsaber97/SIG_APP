@@ -6,6 +6,7 @@ import model.InvoiceLine;
 import model.LineTableModel;
 import view.HeaderDialog;
 import view.InvoiceFrame;
+import view.LineDialog;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -34,6 +35,7 @@ public class FileOperations implements ActionListener, ListSelectionListener {
     LineTableModel lineTableModel;
     InvoiceFrame invoiceFrame;
     HeaderDialog invoiceDialog;
+    LineDialog lineDialog;
 
     //method to implement actions on file menu
     @Override
@@ -43,11 +45,13 @@ public class FileOperations implements ActionListener, ListSelectionListener {
             case "saveFile" -> writeFiles();
             case "exit" -> System.exit(0);
             case "createHeader" -> createHeaderInvoice();
-            case "deleteHeader" -> deleteSelectedInvoice();
+            case "deleteHeader" -> deleteHeaderInvoice();
             case "submitHeaderDialog" -> submitHeaderDialog();
             case "cancelHeaderDialog" -> cancelHeaderDialog();
-            case "saveLine" -> System.out.println("we save data to csv file");
-            case "cancelLine" -> System.out.println("we cancel data from csv file");
+            case "createLine" -> createLineInvoice();
+            case "deleteLine" -> deleteLineInvoice();
+            case "submitLineDialog" -> submitLineDialog();
+            case "cancelLineDialog" -> cancelLineDialog();
         }
     }
 
@@ -189,13 +193,14 @@ public class FileOperations implements ActionListener, ListSelectionListener {
         }
     }
 
+    //method to create invoiceHeader to HeaderTable
     private void createHeaderInvoice() {
         invoiceDialog = new HeaderDialog(invoiceFrame);
         invoiceDialog.setVisible(true);
     }
 
     //method to delete invoiceHeader from HeaderTable
-    private void deleteSelectedInvoice() {
+    private void deleteHeaderInvoice() {
         int selectedRow = invoiceFrame.getHeaderTable().getSelectedRow();
         if (selectedRow != -1) {
             invoiceFrame.getHeaderArrayList().remove(selectedRow);
@@ -206,17 +211,10 @@ public class FileOperations implements ActionListener, ListSelectionListener {
             invoiceFrame.getDateTxt().setText(null);
             invoiceFrame.getCustomerNameTxt().setText(null);
             invoiceFrame.getTotalValueLbl().setText(null);
-            System.out.println("-----invoice number : " + selectedRow + "is deleted successfully-----");
+            System.out.println("-----invoice number : " + selectedRow + " is deleted successfully-----");
         } else {
             JOptionPane.showMessageDialog(invoiceFrame, "you must select one header invoice at least", "Warning", JOptionPane.WARNING_MESSAGE);
         }
-    }
-
-    //method to cancel creation of HeaderInvoice
-    private void cancelHeaderDialog() {
-        invoiceDialog.setVisible(false);
-        invoiceDialog.dispose();
-        invoiceDialog = null;
     }
 
     //method to submit creation of HeaderInvoice
@@ -225,10 +223,10 @@ public class FileOperations implements ActionListener, ListSelectionListener {
         String customer = invoiceDialog.getCustomerNameTxt().getText();
         int num = invoiceFrame.getNextInvoiceNum();
         try {
-            String[] dateParts = date.split("-");  // "22-05-2013" -> {"22", "05", "2013"}  xy-qw-20ij
+            String[] dateParts = date.split("-");
             int day = Integer.parseInt(dateParts[0]);
             int month = Integer.parseInt(dateParts[1]);
-            if (date.isEmpty() || customer.isEmpty()) {
+            if (date.equals("") || customer.equals("")) {
                 JOptionPane.showMessageDialog(invoiceFrame, "you must enter all data", "Warning", JOptionPane.WARNING_MESSAGE);
             } else if (dateParts.length < 3 || day > 31 || month > 12) {
                 JOptionPane.showMessageDialog(invoiceFrame, "Wrong date format", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -243,6 +241,79 @@ public class FileOperations implements ActionListener, ListSelectionListener {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(invoiceFrame, "Wrong date format", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    //method to cancel creation of HeaderInvoice
+    private void cancelHeaderDialog() {
+        invoiceDialog.setVisible(false);
+        invoiceDialog.dispose();
+        invoiceDialog = null;
+    }
+
+    //method to create invoiceLine to LineTable
+    private void createLineInvoice() {
+        int selectedInvoice = invoiceFrame.getHeaderTable().getSelectedRow();
+        if (selectedInvoice == -1) {
+            JOptionPane.showMessageDialog(invoiceFrame, "you must select invoice header at first", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            lineDialog = new LineDialog(invoiceFrame);
+            lineDialog.setVisible(true);
+        }
+    }
+
+    //method to delete invoiceLine from LineTable
+    private void deleteLineInvoice() {
+        int selectedRow = invoiceFrame.getLineTable().getSelectedRow();
+        if (selectedRow != -1) {
+            LineTableModel lineTableModel = (LineTableModel) invoiceFrame.getLineTable().getModel();
+            lineTableModel.getLineArrayList().remove(selectedRow);
+            lineTableModel.fireTableDataChanged();
+            invoiceFrame.getHeaderTableModel().fireTableDataChanged();
+            System.out.println("-----line number : " + selectedRow + " is deleted successfully-----");
+
+            //clear data after delete line
+            invoiceFrame.getNumberValueLbl().setText(null);
+            invoiceFrame.getDateTxt().setText(null);
+            invoiceFrame.getCustomerNameTxt().setText(null);
+            invoiceFrame.getTotalValueLbl().setText(null);
+        } else {
+            JOptionPane.showMessageDialog(invoiceFrame, "you must select one line invoice at least", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    //method to submit creation of LineInvoice
+    private void submitLineDialog() {
+        String itemName = lineDialog.getItemNameTxt().getText();
+        String itemPrice = lineDialog.getItemPriceTxt().getText();
+        String itemCount = lineDialog.getItemCountTxt().getText();
+        int count = Integer.parseInt(itemCount);
+        double price = Double.parseDouble(itemPrice);
+        int selectedInvoice = invoiceFrame.getHeaderTable().getSelectedRow();
+        try {
+            if (!itemName.equals("") || !itemPrice.equals("") || !itemCount.equals("")) {
+                InvoiceHeader invoice = invoiceFrame.getHeaderArrayList().get(selectedInvoice);
+                InvoiceLine line = new InvoiceLine(itemName, price, count, invoice);
+                invoice.getInvoiceLines().add(line);
+                LineTableModel lineTableModel = (LineTableModel) invoiceFrame.getLineTable().getModel();
+                lineTableModel.fireTableDataChanged();
+                invoiceFrame.getHeaderTableModel().fireTableDataChanged();
+                lineDialog.setVisible(false);
+                lineDialog.dispose();
+                lineDialog = null;
+            } else {
+                JOptionPane.showMessageDialog(invoiceFrame, "you must enter all data", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(invoiceFrame, "you must enter valid type of data", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    //method to cancel creation of LineInvoice
+    private void cancelLineDialog() {
+        lineDialog.setVisible(false);
+        lineDialog.dispose();
+        lineDialog = null;
     }
 
 }

@@ -13,6 +13,10 @@ public class LineTableModel extends AbstractTableModel {
         this.lineArrayList = lineArrayList;
     }
 
+    public ArrayList<InvoiceLine> getLineArrayList() {
+        return lineArrayList;
+    }
+
     //override method to get size of table rows
     @Override
     public int getRowCount() {

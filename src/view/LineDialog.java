@@ -9,6 +9,7 @@ public class LineDialog extends JDialog {
     JTextField itemNameTxt, itemPriceTxt, itemCountTxt;
     JButton submitBtn, cancelBtn;
 
+    //define properties for all data
     public JTextField getItemPriceTxt() {
         return itemPriceTxt;
     }
@@ -23,33 +24,33 @@ public class LineDialog extends JDialog {
 
     //constructor for invoice creation dialog creation
     public LineDialog(InvoiceFrame invoiceFrame) {
-        setLocation(600, 600);
-        setLayout(new GridLayout(3, 2));
+        setLocation(400, 400);
+        setLayout(new GridLayout(4, 2));
         setTitle("Create Line Invoice");
 
         itemNameLbl = new JLabel("Item Name : ");
         itemNameTxt = new JTextField(20);
 
-        itemCountLbl = new JLabel("Item Count : ");
-        itemCountTxt = new JTextField(20);
-
         itemPriceLbl = new JLabel("Item Price : ");
         itemPriceTxt = new JTextField(20);
 
-        submitBtn = new JButton("save");
-        submitBtn.setActionCommand("saveLine");
+        itemCountLbl = new JLabel("Item Count : ");
+        itemCountTxt = new JTextField(20);
+
+        submitBtn = new JButton("submit");
+        submitBtn.setActionCommand("submitLineDialog");
         submitBtn.addActionListener(invoiceFrame.getFileOperations());
 
         cancelBtn = new JButton("cancel");
-        cancelBtn.setActionCommand("cancelLine");
+        cancelBtn.setActionCommand("cancelLineDialog");
         cancelBtn.addActionListener(invoiceFrame.getFileOperations());
 
         add(itemNameLbl);
         add(itemNameTxt);
-        add(itemCountLbl);
-        add(itemCountTxt);
         add(itemPriceLbl);
         add(itemPriceTxt);
+        add(itemCountLbl);
+        add(itemCountTxt);
         add(submitBtn);
         add(cancelBtn);
 

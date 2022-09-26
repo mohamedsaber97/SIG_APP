@@ -10,6 +10,7 @@ public class HeaderDialog extends JDialog {
     JTextField dateTxt, customerNameTxt;
     JButton submitBtn, cancelBtn;
 
+    //define properties for all data
     public JTextField getCustomerNameTxt() {
         return customerNameTxt;
     }

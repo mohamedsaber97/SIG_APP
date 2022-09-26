@@ -213,15 +213,15 @@ public class InvoiceFrame extends JFrame {
         dataPanel.setBounds(25, 200, 450, 300);
         linePanel.add(dataPanel);
 
-        saveBtn = new JButton("Save");
+        saveBtn = new JButton("Create Item");
         saveBtn.setBounds(100, 550, 100, 30);
-        saveBtn.setActionCommand("saveLine");
+        saveBtn.setActionCommand("createLine");
         saveBtn.addActionListener(fileOperations);
         linePanel.add(saveBtn);
 
-        cancelBtn = new JButton("Cancel");
+        cancelBtn = new JButton("Delete Item");
         cancelBtn.setBounds(250, 550, 100, 30);
-        cancelBtn.setActionCommand("cancelLine");
+        cancelBtn.setActionCommand("deleteLine");
         cancelBtn.addActionListener(fileOperations);
         linePanel.add(cancelBtn);
 
@@ -238,7 +238,7 @@ public class InvoiceFrame extends JFrame {
     //method to draw line invoice table
     void drawDefaultLineTable() {
         String[] cols = {"No.", "Item Name", "Item Price", "Count", "Total"};
-        int rows = 4;
+        int rows = 0;
         DefaultTableModel defaultLineTable = new DefaultTableModel(rows, cols.length);
         defaultLineTable.setColumnIdentifiers(cols);
         lineTable = new JTable(defaultLineTable);
