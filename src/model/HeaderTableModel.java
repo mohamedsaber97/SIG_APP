@@ -35,13 +35,17 @@ public class HeaderTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         InvoiceHeader invoiceHeader = headerArrayList.get(rowIndex);
-        return switch (columnIndex) {
-            case 0 -> invoiceHeader.getInvoiceNum();
-            case 1 -> invoiceHeader.getInvoiceDate();
-            case 2 -> invoiceHeader.getCustomerName();
-            case 3 -> invoiceHeader.getHeaderTotal();
-            default -> "";
-        };
+        switch (columnIndex) {
+            case 0:
+                return invoiceHeader.getInvoiceNum();
+            case 1:
+                return invoiceHeader.getInvoiceDate();
+            case 2:
+                return invoiceHeader.getCustomerName();
+            case 3:
+                return invoiceHeader.getHeaderTotal();
+            default:
+                return "";
+        }
     }
-
 }

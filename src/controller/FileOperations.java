@@ -41,17 +41,39 @@ public class FileOperations implements ActionListener, ListSelectionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "loadFile" -> readFiles();
-            case "saveFile" -> writeFiles();
-            case "exit" -> System.exit(0);
-            case "createHeader" -> createHeaderInvoice();
-            case "deleteHeader" -> deleteHeaderInvoice();
-            case "submitHeaderDialog" -> submitHeaderDialog();
-            case "cancelHeaderDialog" -> cancelHeaderDialog();
-            case "createLine" -> createLineInvoice();
-            case "deleteLine" -> deleteLineInvoice();
-            case "submitLineDialog" -> submitLineDialog();
-            case "cancelLineDialog" -> cancelLineDialog();
+            case "loadFile":
+                readFiles();
+                break;
+            case "saveFile":
+                writeFiles();
+                break;
+            case "exit":
+                System.exit(0);
+                break;
+            case "createHeader":
+                createHeaderInvoice();
+                break;
+            case "deleteHeader":
+                deleteHeaderInvoice();
+                break;
+            case "submitHeaderDialog":
+                submitHeaderDialog();
+                break;
+            case "cancelHeaderDialog":
+                cancelHeaderDialog();
+                break;
+            case "createLine":
+                createLineInvoice();
+                break;
+            case "deleteLine":
+                deleteLineInvoice();
+                break;
+            case "submitLineDialog":
+                submitLineDialog();
+                break;
+            case "cancelLineDialog":
+                cancelLineDialog();
+                break;
         }
     }
 

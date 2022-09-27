@@ -39,14 +39,20 @@ public class LineTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         InvoiceLine invoiceLine = lineArrayList.get(rowIndex);
-        return switch (columnIndex) {
-            case 0 -> invoiceLine.getInvoiceHeader().getInvoiceNum();
-            case 1 -> invoiceLine.getItemName();
-            case 2 -> invoiceLine.getItemPrice();
-            case 3 -> invoiceLine.getCount();
-            case 4 -> invoiceLine.getLineTotal();
-            default -> "";
-        };
+        switch (columnIndex) {
+            case 0:
+                return invoiceLine.getInvoiceHeader().getInvoiceNum();
+            case 1:
+                return invoiceLine.getItemName();
+            case 2:
+                return invoiceLine.getItemPrice();
+            case 3:
+                return invoiceLine.getCount();
+            case 4:
+                return invoiceLine.getLineTotal();
+            default:
+                return "";
+        }
     }
 
 }
